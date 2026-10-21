@@ -1017,3 +1017,25 @@ The first CI run after the public push failed only on that assertion. `v1.0.1` f
 adds the `requirements-dev.txt` install step. The release helper also updates `package.json` to the tag
 version before committing, preventing metadata drift. The `backup` branch and `backups/` ZIP keep the
 previous release (`v1.0.0`) available.
+
+### 47. v1.0.2 correction and full UI smoke in the release gate (2026-10-21)
+
+The 1.0.1 MIME edit did not reach the commit: the file was unchanged, so CI still received
+`application/javascript`. `desktop/desktop_app.py` and `server.py` now carry the explicit map, and
+`tests/test_desktop_host.py` asserts `StudioHTTPHandler.extensions_map['.js'] == 'text/javascript'`
+before checking the response. This makes a missing override fail locally, not only on a runner with a
+different registry.
+
+The real-WebView2 smoke also exposed a genuine test race: `TRAINING_COMPLETE` arrives before
+`TEST_SET_EVALUATED`, and the old loop sampled `#playground-accuracy` in that gap. It now waits up to 15
+seconds for the measured held-out report after completion. The full 108-check smoke passes, and
+`tools/push_with_backup.ps1` runs it by default before building or tagging a release.
+
+A release-gate failure then exposed a real online-learning problem: six 3-step corrections on shifted
+MNIST mistakes could move thousands of small weights and drop held-out accuracy from 100% to 56.5%. The
+old trust region bounded only the largest coordinate. `applyOnlineUpdate` now also caps the L2 norm of
+the complete parameter delta (`ONLINE_UPDATE_NORM_LIMIT = 0.05`). The corrected sample's loss still
+falls, the 25-step correction still clears the decisive-reduction threshold, and three consecutive guard
+runs held 100% -> 100% on the held-out partition.
+
+The 1.0.1 release remains published for history. 1.0.2 supersedes it and is the recommended download.

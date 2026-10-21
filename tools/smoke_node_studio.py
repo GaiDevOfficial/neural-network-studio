@@ -592,6 +592,15 @@ def main():
             progress = ev("document.getElementById('playground-progress').textContent", "") or ""
             accuracy = ev("document.getElementById('playground-accuracy').textContent", "") or ""
             if "Practice finished" in progress or "Held-out check" in accuracy:
+                # TRAINING_COMPLETE and TEST_SET_EVALUATED are two worker messages.
+                # The completion arrives first, so wait for the real held-out report
+                # instead of sampling the DOM in the gap between them.
+                eval_deadline = time.time() + 15
+                while time.time() < eval_deadline:
+                    accuracy = ev("document.getElementById('playground-accuracy').textContent", "") or ""
+                    if "Held-out check" in accuracy or "Held-out mistake score" in accuracy:
+                        break
+                    time.sleep(0.25)
                 break
         check("Teach runs real training and reports real rounds",
               "Practice" in progress or "Held-out check" in accuracy, f"{progress} | {accuracy}"[:160])

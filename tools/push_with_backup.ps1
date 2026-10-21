@@ -6,6 +6,7 @@ param(
     [switch]$SkipTests,
     [switch]$SkipBuild,
     [switch]$SkipPackagedSmoke,
+    [switch]$SkipUiSmoke,
     [switch]$SkipRelease
 )
 
@@ -68,6 +69,12 @@ if (-not $SkipTests) {
     Write-Host "`nRunning Python suites..."
     npm run test:python
     if ($LASTEXITCODE -ne 0) { throw "npm run test:python failed; release aborted." }
+
+    if (-not $SkipUiSmoke) {
+        Write-Host "`nRunning real-WebView2 UI smoke..."
+        python tools/smoke_node_studio.py
+        if ($LASTEXITCODE -ne 0) { throw "Real-WebView2 UI smoke failed; release aborted." }
+    }
 }
 
 if (-not $SkipBuild) {

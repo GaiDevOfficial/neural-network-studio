@@ -88,6 +88,10 @@ class DesktopHostTests(unittest.TestCase):
         self.assertGreaterEqual(self.httpd.request_queue_size, 32)
 
     def test_real_pages_and_modules_are_served_with_correct_mime(self):
+        # Pin the class map itself: a response that happens to be text/javascript
+        # on one machine is not enough if the map is absent and CI differs.
+        self.assertEqual(desktop_app.StudioHTTPHandler.extensions_map.get('.js'), 'text/javascript')
+
         status, content_type, body = _get(f'{self.base}/graph_studio.html')
         self.assertEqual(status, 200)
         self.assertTrue(content_type.startswith('text/html'), content_type)

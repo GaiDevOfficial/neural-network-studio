@@ -4,6 +4,26 @@ All notable changes to Node Studio are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-10-21
+
+### Fixed
+
+- The desktop host now actually subclass-overrides `extensions_map` for JavaScript and related assets.
+  The previous release note described the intent, but the edit was lost before the 1.0.1 commit; the
+  submitted package still inherited the machine's registry value. A unit assertion now pins the map itself
+  as well as the response header.
+- The real-WebView2 smoke waits for the Playground's separate `TEST_SET_EVALUATED` message after
+  `TRAINING_COMPLETE` instead of sampling the accuracy element in the gap between the two messages.
+- Online corrections now cap the aggregate L2 norm of the full parameter delta, not only the largest
+  coordinate. Six default-budget corrections on shifted MNIST mistakes could rewrite enough small
+  weights to drop held-out accuracy from 100% to 56.5%; the aggregate trust region keeps that guard at
+  100% across repeated runs while still reducing the corrected sample's loss.
+
+### Changed
+
+- The release helper runs the real-WebView2 UI smoke by default and exposes `-SkipUiSmoke` for a deliberate
+  fast path.
+
 ## [1.0.1] - 2026-10-21
 
 ### Fixed
@@ -16,6 +36,9 @@ All notable changes to Node Studio are documented here. The format follows
 ### Changed
 
 - CI installs its Python dependencies from `requirements-dev.txt`.
+
+> Superseded by 1.0.2: the MIME override described above was not included in the 1.0.1 commit,
+> so the shipped host still inherited the Windows registry value.
 
 ## [1.0.0] - 2026-10-21
 
@@ -59,5 +82,6 @@ All notable changes to Node Studio are documented here. The format follows
 - The Node Studio name and branding are protected by the trademark policy.
 - Proprietary and commercial terms are available through a separate commercial license.
 
+[1.0.2]: https://github.com/GaiDevOfficial/neural-network-studio/releases/tag/v1.0.2
 [1.0.1]: https://github.com/GaiDevOfficial/neural-network-studio/releases/tag/v1.0.1
 [1.0.0]: https://github.com/GaiDevOfficial/neural-network-studio/releases/tag/v1.0.0

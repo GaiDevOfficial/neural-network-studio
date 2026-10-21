@@ -24,6 +24,17 @@ class StudioHTTPServer(ThreadingHTTPServer):
     request_queue_size = 64
 
 class DevHandler(SimpleHTTPRequestHandler):
+    extensions_map = {
+        **SimpleHTTPRequestHandler.extensions_map,
+        '.js': 'text/javascript',
+        '.mjs': 'text/javascript',
+        '.css': 'text/css',
+        '.json': 'application/json',
+        '.map': 'application/json',
+        '.svg': 'image/svg+xml',
+        '.wasm': 'application/wasm',
+    }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DIRECTORY, **kwargs)
 

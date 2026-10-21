@@ -49,6 +49,20 @@ class StudioHTTPServer(ThreadingHTTPServer):
     request_queue_size = 64
 
 class StudioHTTPHandler(SimpleHTTPRequestHandler):
+    # The Windows registry can map .js to application/javascript, while other
+    # machines map it to text/javascript. Pin the web-standard values so the
+    # packaged host, the dev server and CI all answer identically.
+    extensions_map = {
+        **SimpleHTTPRequestHandler.extensions_map,
+        '.js': 'text/javascript',
+        '.mjs': 'text/javascript',
+        '.css': 'text/css',
+        '.json': 'application/json',
+        '.map': 'application/json',
+        '.svg': 'image/svg+xml',
+        '.wasm': 'application/wasm',
+    }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=get_base_dir(), **kwargs)
 

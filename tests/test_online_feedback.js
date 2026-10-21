@@ -7,9 +7,10 @@
  * the generalised accuracy of the model.
  *
  * The engine step is a bounded trust-region update (see NeuralNetwork.applyOnlineUpdate):
- * the largest gradient coordinate is scaled to ONLINE_GRADIENT_LIMIT, so one correction moves
- * any weight by at most the (conservative, default 0.005) online learning rate and never
- * inherits the batch training rate.
+ * the largest gradient coordinate is scaled to ONLINE_GRADIENT_LIMIT and the whole parameter
+ * delta is capped by ONLINE_UPDATE_NORM_LIMIT, so one correction moves any weight by at most
+ * the (conservative, default 0.005) online learning rate, never inherits the batch training
+ * rate, and cannot rewrite tens of thousands of coordinates at once.
  *
  * The test runs against the real MNIST corpus and exercises BOTH layers:
  *   1. Engine level  : NeuralNetwork.online_step + probeSample gradient identity checks.
@@ -43,10 +44,10 @@ const TRAIN_EPOCHS = 2;
 const CORRECTION_STEPS = 25;
 const GUARD_CORRECTIONS = 6;
 /**
- * The studio's default correction budget (canvas_feedback ships steps=3 by default). Measured
- * across 8 independently trained models: 6 corrections x 10 steps at the default online rate
- * can collapse a fragile model (bimodal 0% / 48% held-out outcomes), while 6 x 3 steps stays
- * within 1 pp - so the guard exercises the budget a real session actually uses.
+ * The studio's default correction budget (canvas_feedback ships steps=3 by default). Six
+ * corrections x 3 steps at the default online rate used to collapse fragile models because
+ * the coordinate clip still allowed every weight to move; the aggregate norm clip in the
+ * engine is what keeps this guard stable. It exercises the budget a real session uses.
  */
 const GUARD_STEPS = 3;
 const MAX_HOLDOUT_DROP = 0.02; // 2 percentage points

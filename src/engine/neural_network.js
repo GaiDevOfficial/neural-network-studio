@@ -101,6 +101,13 @@ export class NeuralNetwork {
    * per-coordinate normalisation, coordinates this sample does not activate stay put).
    */
   static ONLINE_GRADIENT_LIMIT = 1;
+  /**
+   * Aggregate trust region for one single-sample update. Coordinate clipping alone still
+   * lets tens of thousands of small coordinates move together, which can rewrite a fragile
+   * model after a handful of corrections. This caps the L2 norm of the whole parameter
+   * delta while preserving its direction.
+   */
+  static ONLINE_UPDATE_NORM_LIMIT = 0.05;
 
   constructor(config = {}) {
     this.layers = [];
@@ -593,14 +600,35 @@ export class NeuralNetwork {
       ? NeuralNetwork.ONLINE_GRADIENT_LIMIT / maxGradient
       : 1;
 
+    // Measure the full proposed delta before applying it. The coordinate clip above keeps
+    // every single weight bounded; this aggregate clip keeps the correction from moving
+    // thousands of coordinates far enough to erase the model's general decision boundary.
+    let updateNormSq = 0;
     for (let l = 0; l < this.layers.length; l++) {
       const layer = this.layers[l];
       for (let i = 0; i < layer.outputSize; i++) {
-        layer.biases[i] -= lr * layer.biasGradients[i] * scale;
+        const biasDelta = lr * layer.biasGradients[i] * scale;
+        updateNormSq += biasDelta * biasDelta;
+        const gradRow = layer.weightGradients[i];
+        for (let j = 0; j < layer.inputSize; j++) {
+          const delta = lr * gradRow[j] * scale;
+          updateNormSq += delta * delta;
+        }
+      }
+    }
+    const updateNorm = Math.sqrt(updateNormSq);
+    const normScale = updateNorm > NeuralNetwork.ONLINE_UPDATE_NORM_LIMIT
+      ? NeuralNetwork.ONLINE_UPDATE_NORM_LIMIT / updateNorm
+      : 1;
+
+    for (let l = 0; l < this.layers.length; l++) {
+      const layer = this.layers[l];
+      for (let i = 0; i < layer.outputSize; i++) {
+        layer.biases[i] -= lr * layer.biasGradients[i] * scale * normScale;
         const row = layer.weights[i];
         const gradRow = layer.weightGradients[i];
         for (let j = 0; j < layer.inputSize; j++) {
-          row[j] -= lr * gradRow[j] * scale;
+          row[j] -= lr * gradRow[j] * scale * normScale;
         }
       }
     }
@@ -617,7 +645,7 @@ export class NeuralNetwork {
       });
     }
 
-    return { maxGradient, scale };
+    return { maxGradient, scale, updateNorm, normScale };
   }
 
   /**
