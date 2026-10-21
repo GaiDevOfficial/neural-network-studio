@@ -1,0 +1,75 @@
+name: Bug report
+description: Report a reproducible defect in Node Studio.
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make Node Studio reliable. Please search existing issues first.
+        For security vulnerabilities, do not open a public issue; use SECURITY.md instead.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: The release tag, ZIP checksum or commit you tested.
+      placeholder: v1.0.0 / 829844C5...
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Where did it happen?
+      options:
+        - Portable Windows app
+        - Local browser (server.py)
+        - Static web build
+        - Playground
+        - Node canvas / wiring
+        - Training / metrics
+        - Data source
+        - Export
+        - Lesson or mission
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include exact block names and actions. A minimal graph or project helps.
+      placeholder: |
+        1. Open ...
+        2. Press ...
+        3. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Include the status line, console error and any measured values.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Windows version, browser/WebView2 version, Node/Python version if relevant.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues.
+          required: true
+        - label: This is not a security vulnerability.
+          required: true

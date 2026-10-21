@@ -1,0 +1,51 @@
+{
+  "name": "neural-network-studio",
+  "version": "1.0.0",
+  "description": "Node Studio - modular visual neural-network builder",
+  "main": "src/graph_studio.html",
+  "type": "module",
+  "scripts": {
+    "start": "python server.py",
+    "test": "node tests/test_engine_convergence.js && node tests/test_edge_cases.js && node tests/test_mnist_convergence.js && node tests/test_image_pipeline.js && node tests/test_online_feedback.js && node tests/test_training_continuity.js && npm run test:graph && npm run test:nodes && npm run test:db && npm run test:exports && npm run test:onnx && npm run test:ui && npm run test:menu && npm run test:drag && npm run test:playground && npm run test:wire && npm run test:quick && npm run test:missions && npm run test:examples",
+    "test:engine": "node tests/test_engine_convergence.js",
+    "test:edge": "node tests/test_edge_cases.js",
+    "test:mnist": "node tests/test_mnist_convergence.js",
+    "test:image": "node tests/test_image_pipeline.js",
+    "test:feedback": "node tests/test_online_feedback.js",
+    "test:continuity": "node tests/test_training_continuity.js",
+    "test:graph": "node tests/test_graph_engine.js",
+    "test:nodes": "node tests/test_node_convergence.js",
+    "test:db": "node tests/test_db_streaming.js",
+    "test:exports": "node tests/test_node_exports.js",
+    "test:onnx": "node tests/test_onnx_export.js",
+    "test:ui": "node tests/test_ui_dom_static.js",
+    "test:menu": "node tests/test_menu_lifecycle.js",
+    "test:drag": "node tests/test_drag_delete.js",
+    "test:playground": "node tests/test_playground_flow.js",
+    "test:wire": "node tests/test_wire_interactions.js",
+    "test:quick": "node tests/test_quick_node_menu.js",
+    "test:missions": "node tests/test_step_by_step.js",
+    "test:examples": "node tools/verify_example_projects.mjs",
+    "test:python": "python -m unittest python_core.test_engine python_core.test_active_learning python_core.test_data_connectors && python tests/test_desktop_host.py",
+    "smoke:desktop": "python tools/smoke_desktop_boot.py",
+    "smoke:packaged": "node tools/smoke_packaged_exe.mjs",
+    "fetch:mnist": "python tools/fetch_mnist.py",
+    "build:exe": "python desktop/build_exe.py"
+  },
+  "keywords": [
+    "neural-network",
+    "deep-learning",
+    "visual-programming",
+    "no-code-ai"
+  ],
+  "author": "GaiDevOfficial",
+  "license": "AGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GaiDevOfficial/neural-network-studio.git"
+  },
+  "homepage": "https://github.com/GaiDevOfficial/neural-network-studio#readme",
+  "bugs": {
+    "url": "https://github.com/GaiDevOfficial/neural-network-studio/issues"
+  }
+}

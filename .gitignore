@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Build output
+dist/NeuralNetworkStudio/
+dist/build/
+dist/build-portable/
+dist/web/
+dist/*.exe
+!dist/NeuralNetworkStudio-Windows-x64.zip
+!dist/NeuralNetworkStudio-Windows-x64.sha256.txt
+
+# Downloaded test corpora / caches
+tools/cache/
+
+# Local one-version-behind backups
+backups/
+
+# Logs and editor files
+*.log
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Internal working notes (not part of the app)
+CHAT.md
+architecture_blueprint.md

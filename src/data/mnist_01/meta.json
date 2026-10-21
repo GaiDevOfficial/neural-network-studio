@@ -1,0 +1,64 @@
+{
+  "dataset": "MNIST",
+  "task": "binary handwritten digit classification (0 vs 1)",
+  "provenance": "REAL MNIST corpus, parsed from the original IDX archives",
+  "sourceMirror": "https://storage.googleapis.com/cvdf-datasets/mnist",
+  "sourceChecksumsMd5": {
+    "train_images": "f68b3c2dcbeaaa9fbdd348bbdeb94873",
+    "train_labels": "d53e105ee54ea40749a09fcbcd1e9432",
+    "test_images": "9fb629c4189551a2d022fa330f9573f3",
+    "test_labels": "ec29112dd5afa0611ce80d1b7f02629c"
+  },
+  "license": "MNIST is distributed by Yann LeCun / Corinna Cortes / Christopher Burges for research use.",
+  "imageDim": {
+    "width": 28,
+    "height": 28
+  },
+  "pixelsPerImage": 784,
+  "encoding": "uint8 row-major grayscale, 0 = background, 255 = full ink",
+  "normalization": "x / 255.0 applied by the loader (NO synthetic augmentation)",
+  "classes": [
+    0,
+    1
+  ],
+  "train": {
+    "count": 2500,
+    "perClass": {
+      "0": 1250,
+      "1": 1250
+    }
+  },
+  "test": {
+    "count": 800,
+    "perClass": {
+      "0": 400,
+      "1": 400
+    }
+  },
+  "subsetPolicy": "even-stride selection across the complete official class partition",
+  "files": {
+    "trainX.bin": {
+      "bytes": 1960000,
+      "sha256": "d09d1a23a23a841626613203e1cde4a19b87a9ee81b5776bfaddc3071a8e9ea7"
+    },
+    "trainY.bin": {
+      "bytes": 2500,
+      "sha256": "fca3da91f1d2c7ef73f32ccfe2651e2ad1afce65485f73b330bbbcde1f5a0d6e"
+    },
+    "testX.bin": {
+      "bytes": 627200,
+      "sha256": "b0a09920a4e18c6292d0cbf83000b35941ade1c598b26713cb6b83b5588463fa"
+    },
+    "testY.bin": {
+      "bytes": 800,
+      "sha256": "84853ff5c288fbfaa75e0c2b8734d5aa1d517ff7c3948108466afa93c1c8d916"
+    }
+  },
+  "generatedAt": "2026-10-18T15:05:40.989238+00:00",
+  "sourceUrls": {
+    "train_images": "https://storage.googleapis.com/cvdf-datasets/mnist/train-images-idx3-ubyte.gz",
+    "train_labels": "https://storage.googleapis.com/cvdf-datasets/mnist/train-labels-idx1-ubyte.gz",
+    "test_images": "https://storage.googleapis.com/cvdf-datasets/mnist/t10k-images-idx3-ubyte.gz",
+    "test_labels": "https://storage.googleapis.com/cvdf-datasets/mnist/t10k-labels-idx1-ubyte.gz"
+  }
+}

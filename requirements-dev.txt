@@ -1,0 +1,9 @@
+# Development and verification dependencies.
+# The shipped portable app bundles its runtime; end users do not install these.
+
+numpy>=1.26
+pillow>=10
+onnx>=1.16
+onnxruntime>=1.18
+pyinstaller>=6
+pywebview>=5

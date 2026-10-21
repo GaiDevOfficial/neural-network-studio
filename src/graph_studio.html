@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Node Studio — Neural Network Studio</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/node_studio.css">
+</head>
+<body class="ns-body">
+
+  <header class="ns-topbar">
+    <div class="ns-brand">
+      <span class="ns-logo">&#9672;</span>
+      <div>
+        <div class="ns-title">Node Studio</div>
+        <div class="ns-sub">Modular visual neural-network builder</div>
+      </div>
+    </div>
+
+    <div class="ns-toolbar">
+      <div class="ns-mode" role="group" aria-label="Node building tier">
+        <button id="btn-mode-assist" class="active" type="button" title="Guided beginner — Smart Assist wiring">Beginner &middot; Assist</button>
+        <button id="btn-mode-manual" type="button" title="Advanced — full manual wiring">Advanced &middot; Manual</button>
+      </div>
+
+      <div class="ns-actions">
+        <button id="action-dataset" class="ns-btn ns-action-chip is-empty" type="button" title="Show the dataset block">Dataset: &mdash;</button>
+        <button id="btn-mode-playground" class="ns-btn ns-playground-jump" type="button" title="Open the no-node drawing playground">Playground</button>
+        <button id="btn-preset-mnist" class="ns-btn ns-btn-accent ns-edit-only" type="button" title="Build the MNIST 0-vs-1 preset">MNIST</button>
+        <button id="btn-preset-xor" class="ns-btn ns-edit-only" type="button" title="Build the XOR preset">XOR</button>
+        <button id="btn-preset-iris" class="ns-btn ns-edit-only" type="button" title="Build the Iris multi-class preset">Iris</button>
+        <span class="ns-divider" aria-hidden="true"></span>
+
+        <div class="ns-dropdown">
+          <button id="btn-tour" class="ns-btn ns-btn-lessons" type="button">Lessons &#9662;</button>
+          <div id="tour-menu" class="ns-menu ns-menu-wide ns-lessons-menu" hidden>
+            <div class="ns-menu-head">10 step-by-step lessons</div>
+            <button type="button" class="ns-lesson-item" data-tour-track="track_a">
+              <span class="ns-lesson-num">01</span>
+              <span class="ns-lesson-copy"><span class="ns-lesson-name">Your first AI in the Playground</span><span class="ns-lesson-sub">Draw, predict, correct · no blocks</span></span>
+              <span class="ns-lesson-tag">Playground</span>
+            </button>
+            <button type="button" class="ns-lesson-item" data-tour-id="first_ai">
+              <span class="ns-lesson-num">02</span>
+              <span class="ns-lesson-copy"><span class="ns-lesson-name">Your first AI from a preset</span><span class="ns-lesson-sub">MNIST chain · train · read metrics</span></span>
+              <span class="ns-lesson-tag">Guided</span>
+            </button>
+            <button type="button" class="ns-lesson-item" data-tour-track="track_b">
+              <span class="ns-lesson-num">03</span>
+              <span class="ns-lesson-copy"><span class="ns-lesson-name">Build a digit classifier from blocks</span><span class="ns-lesson-sub">Smart Assist · preset · real training</span></span>
+              <span class="ns-lesson-tag">Build</span>
+            </button>
+            <button type="button" class="ns-lesson-item" data-tour-id="backprop">
+              <span class="ns-lesson-num">04</span>
+              <span class="ns-lesson-copy"><span class="ns-lesson-name">Inside backpropagation</span><span class="ns-lesson-sub">Gradients, wire signals, optimizers</span></span>
+              <span class="ns-lesson-tag">Concepts</span>
+            </button>
+            <button type="button" class="ns-lesson-item" data-tour-track="track_c">
+              <span class="ns-lesson-num">05</span>
+              <span class="ns-lesson-copy"><span class="ns-lesson-name">Manual wiring &amp; SQL streaming</span><span class="ns-lesson-sub">Advanced tier · SQL Query · export</span></span>
+              <span class="ns-lesson-tag">Advanced</span>
+            </button>
+            <button type="button" class="ns-lesson-item" data-tour-id="database">
+              <span class="ns-lesson-num">06</span>
+              <span class="ns-lesson-copy"><span class="ns-lesson-name">SQL data &amp; live predictions</span><span class="ns-lesson-sub">Query table · train · probe model</span></span>
+              <span class="ns-lesson-tag">Data</span>
+            </button>
+            <button type="button" class="ns-lesson-item" data-mission="build_first_brain">
+              <span class="ns-lesson-num">07</span>
+              <span class="ns-lesson-copy"><span class="ns-lesson-name">Build an XOR network from scratch</span><span class="ns-lesson-sub">Guided build · 13 steps · real gates</span></span>
+              <span class="ns-lesson-tag">Build</span>
+            </button>
+            <button type="button" class="ns-lesson-item" data-mission="build_digit_classifier">
+              <span class="ns-lesson-num">08</span>
+              <span class="ns-lesson-copy"><span class="ns-lesson-name">Build the MNIST classifier</span><span class="ns-lesson-sub">Assisted build · snip &amp; repair a wire</span></span>
+              <span class="ns-lesson-tag">Build</span>
+            </button>
+            <button type="button" class="ns-lesson-item" data-mission="build_custom_pipeline">
+              <span class="ns-lesson-num">09</span>
+              <span class="ns-lesson-copy"><span class="ns-lesson-name">Advanced regression pipeline</span><span class="ns-lesson-sub">Manual wiring · loss · schedule · monitor</span></span>
+              <span class="ns-lesson-tag">Build</span>
+            </button>
+            <button type="button" class="ns-lesson-item" data-tour-id="export_deploy">
+              <span class="ns-lesson-num">10</span>
+              <span class="ns-lesson-copy"><span class="ns-lesson-name">Export &amp; deploy a trained model</span><span class="ns-lesson-sub">JSON · Python · JavaScript · ONNX</span></span>
+              <span class="ns-lesson-tag">Ship</span>
+            </button>
+          </div>
+        </div>
+
+        <button id="btn-fix" class="ns-btn ns-btn-accent ns-edit-only" type="button" hidden>Fix automatically</button>
+        <button id="btn-run" class="ns-btn ns-btn-primary" type="button">&#9654; Run</button>
+        <button id="btn-pause" class="ns-btn" type="button" hidden>&#10074;&#10074; Pause</button>
+        <button id="action-metrics" class="ns-btn" type="button" title="Jump to the live training metrics">Live metrics</button>
+        <span class="ns-divider" aria-hidden="true"></span>
+
+        <div class="ns-dropdown ns-edit-only">
+          <button id="btn-graph-menu" class="ns-btn" type="button">Graph &#9662;</button>
+          <div id="graph-menu" class="ns-menu" hidden>
+            <button id="btn-save-graph" type="button">Save graph</button>
+            <button id="btn-load-graph" type="button">Load graph</button>
+            <button id="btn-reset" type="button">Reset graph</button>
+            <button id="btn-undo" type="button" title="Undo (Ctrl+Z)">Undo (Ctrl+Z)</button>
+          </div>
+        </div>
+        <input type="file" id="file-load-graph" accept=".json,application/json" hidden>
+
+        <div class="ns-dropdown">
+          <button id="btn-export" class="ns-btn ns-btn-accent" type="button">Export &#9662;</button>
+          <div id="export-menu" class="ns-menu" hidden>
+            <button type="button" data-export="json">Model JSON (both studios)</button>
+            <button type="button" data-export="python">Standalone Python (NumPy)</button>
+            <button type="button" data-export="js">Standalone JavaScript (ES module)</button>
+            <button type="button" data-export="npz">Weights archive (.npz)</button>
+            <button type="button" data-export="onnx">ONNX inference model (.onnx)</button>
+            <button type="button" data-export="commands">Packaging commands&hellip;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main id="studio-main" class="ns-main">
+    <aside id="palette" class="ns-palette" aria-label="Block palette"></aside>
+
+    <section class="ns-center">
+      <div id="studio-canvas" class="ns-canvas">
+        <div id="graph-layer" class="ns-graph-layer">
+          <svg id="wire-layer" class="ns-wire-layer" width="6000" height="4000"></svg>
+          <div id="node-layer" class="ns-node-layer"></div>
+        </div>
+        <div id="validation-panel" class="ns-validation"></div>
+      </div>
+      <footer class="ns-statusbar">
+        <span id="status-text">Booting&hellip;</span>
+        <span id="status-dataset" class="ns-status-dataset"></span>
+        <span id="status-params" class="ns-status-params"></span>
+      </footer>
+    </section>
+
+    <aside class="ns-right">
+      <div id="inspector-panel" class="ns-panel">
+        <h3>Inspector</h3>
+        <div id="inspector-body"></div>
+      </div>
+
+      <div id="panel-metrics" class="ns-panel">
+        <h3>Training <span class="ns-chip" id="metrics-mode">no valid graph</span></h3>
+        <div class="ns-metric-grid">
+          <div class="ns-metric"><span>Epoch</span><strong id="metric-epoch">&mdash;</strong></div>
+          <div class="ns-metric"><span>Train loss</span><strong id="metric-loss">&mdash;</strong></div>
+          <div class="ns-metric"><span>Held-out loss</span><strong id="metric-val-loss">&mdash;</strong></div>
+          <div class="ns-metric"><span>Held-out acc</span><strong id="metric-val-acc">&mdash;</strong></div>
+          <div class="ns-metric"><span>Speed</span><strong id="metric-speed">&mdash;</strong></div>
+          <div class="ns-metric"><span>Best val</span><strong id="metric-best">&mdash;</strong></div>
+          <div class="ns-metric"><span>Stall</span><strong id="metric-stall">&mdash;</strong></div>
+        </div>
+        <canvas id="loss-spark" class="ns-spark" width="300" height="72"></canvas>
+        <div class="ns-panel-row">
+          <label class="ns-field ns-field-inline">
+            <span class="ns-field-label">Epoch delay</span>
+            <input type="range" id="epoch-delay" class="ns-range" min="0" max="100" value="100">
+          </label>
+          <label class="ns-check">
+            <input type="checkbox" id="toggle-particles" checked>
+            <span>Flow particles</span>
+          </label>
+        </div>
+      </div>
+
+      <div id="panel-confusion" class="ns-panel">
+        <h3>Confusion Matrix <span class="ns-chip" id="conf-chip">held-out set</span></h3>
+        <div id="conf-body"></div>
+      </div>
+
+      <div id="panel-predict" class="ns-panel">
+        <h3>Prediction</h3>
+        <div id="predict-body"></div>
+      </div>
+
+      <div class="ns-panel ns-panel-log">
+        <h3>Log</h3>
+        <ul id="log-list"></ul>
+      </div>
+    </aside>
+  </main>
+
+  <section id="playground" class="ns-playground" hidden aria-label="Absolute beginner playground">
+    <div class="ns-pg-top">
+      <div>
+        <h2>Tell 0 from 1</h2>
+        <p class="ns-pg-sub">A real neural network, not a demo. Draw a number, ask the brain what it sees, and teach it when it is wrong.</p>
+      </div>
+      <button id="playground-exit" class="ns-btn" type="button">&larr; Back to the block studio</button>
+    </div>
+
+    <div class="ns-pg-grid">
+      <aside class="ns-pg-card ns-pg-story">
+        <h3>Story</h3>
+        <ol id="playground-story">
+          <li data-story="teach"><span>1</span> Press <strong>Teach the brain</strong> and watch it practice.</li>
+          <li data-story="draw"><span>2</span> Draw a <strong>0</strong> or a <strong>1</strong> in the pad.</li>
+          <li data-story="ask"><span>3</span> Press <strong>What is it?</strong> and read the answer.</li>
+          <li data-story="feedback"><span>4</span> If the answer is wrong, tell the brain the right one.</li>
+        </ol>
+        <div class="ns-pg-tip">Under the hood: 28&times;28 pixels &rarr; dense layers &rarr; one answer. Every glow and number below is computed by the real engine.</div>
+      </aside>
+
+      <div class="ns-pg-card ns-pg-brain-card">
+        <h3>Brain cells <span id="playground-brain-state" class="ns-chip">waiting</span></h3>
+        <div class="ns-pg-brain-wrap"><canvas id="playground-brain" aria-label="Live neural network activity"></canvas></div>
+        <div class="ns-pg-legend">Line thickness = real weight &middot; cyan = positive, pink = negative &middot; fireflies = forward signals</div>
+      </div>
+
+      <div class="ns-pg-side">
+        <div class="ns-pg-card ns-pg-draw-card">
+          <h3>Draw a number</h3>
+          <canvas id="playground-pad" class="ns-pg-pad" width="280" height="280" aria-label="Drawing pad"></canvas>
+          <div class="ns-pg-row">
+            <button id="playground-clear" class="ns-btn" type="button">Clear</button>
+            <button id="playground-ask" class="ns-btn ns-btn-primary" type="button" disabled>What is it?</button>
+          </div>
+        </div>
+
+        <div class="ns-pg-card ns-pg-answer-card">
+          <h3>The brain says</h3>
+          <div id="playground-answer" class="ns-pg-answer">Teach the brain first, then ask it about your drawing.</div>
+          <div id="playground-feedback" class="ns-pg-feedback" hidden>
+            <button id="playground-right" class="ns-btn" type="button">That&rsquo;s right</button>
+            <button id="playground-wrong" class="ns-btn ns-btn-danger" type="button">Nope</button>
+          </div>
+          <div id="playground-loss" class="ns-pg-loss"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ns-pg-trainbar">
+      <button id="playground-teach" class="ns-btn ns-btn-primary ns-pg-teach" type="button">Teach the brain</button>
+      <button id="playground-stop" class="ns-btn" type="button" hidden>Stop practicing</button>
+      <div class="ns-pg-progress-wrap">
+        <div id="playground-progress">Ready when you are.</div>
+        <div id="playground-accuracy" class="ns-muted"></div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module">
+    import { initNodeStudio } from './ui/canvas_studio.js';
+    initNodeStudio();
+  </script>
+</body>
+</html>
