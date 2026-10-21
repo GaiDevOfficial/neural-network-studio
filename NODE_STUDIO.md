@@ -1013,10 +1013,13 @@ failed in CI. `desktop/desktop_app.py` and `server.py` now pin a shared `extensi
 `.css`, `.json`, `.map`, `.svg` and `.wasm`, so the packaged host and the dev server answer identically on
 every Windows machine.
 
-The first CI run after the public push failed only on that assertion. `v1.0.1` fixes the host mapping and
-adds the `requirements-dev.txt` install step. The release helper also updates `package.json` to the tag
-version before committing, preventing metadata drift. The `backup` branch and `backups/` ZIP keep the
-previous release (`v1.0.0`) available.
+The first CI run after the public push failed only on that assertion. `v1.0.1` attempted the host mapping
+fix and added the `requirements-dev.txt` install step. The release helper also updates `package.json` to
+the tag version before committing, preventing metadata drift. The `backup` branch and `backups/` ZIP keep
+the previous release (`v1.0.0`) available.
+
+> **Correction:** the MIME edit described above did not reach the v1.0.1 commit. The pin shipped in
+> v1.0.2; see section 47.
 
 ### 47. v1.0.2 correction and full UI smoke in the release gate (2026-10-21)
 
