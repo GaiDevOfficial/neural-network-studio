@@ -4,6 +4,19 @@ All notable changes to Node Studio are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-10-21
+
+### Fixed
+
+- Pinned `.js`, `.mjs`, `.css`, `.json`, `.map`, `.svg` and `.wasm` MIME types in both the desktop host
+  and the development server. Windows machines can map `.js` to `application/javascript` while others use
+  `text/javascript`; the host now answers consistently and the CI MIME assertion is stable.
+- The release helper now updates `package.json` to the tag version before committing.
+
+### Changed
+
+- CI installs its Python dependencies from `requirements-dev.txt`.
+
 ## [1.0.0] - 2026-10-21
 
 ### Added
@@ -46,4 +59,5 @@ All notable changes to Node Studio are documented here. The format follows
 - The Node Studio name and branding are protected by the trademark policy.
 - Proprietary and commercial terms are available through a separate commercial license.
 
+[1.0.1]: https://github.com/GaiDevOfficial/neural-network-studio/releases/tag/v1.0.1
 [1.0.0]: https://github.com/GaiDevOfficial/neural-network-studio/releases/tag/v1.0.0

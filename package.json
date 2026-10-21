@@ -1,6 +1,6 @@
 {
   "name": "neural-network-studio",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node Studio - modular visual neural-network builder",
   "main": "src/graph_studio.html",
   "type": "module",

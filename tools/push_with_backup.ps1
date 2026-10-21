@@ -31,6 +31,18 @@ if ($Version) {
 $newTag = "v$newVersion"
 if (git tag --list $newTag) { throw "Tag already exists: $newTag" }
 
+# Keep package.json's version in step with the tag. The regex replaces only
+# the top-level "version" value and preserves the rest of the file.
+$packagePath = Join-Path $root "package.json"
+$packageText = Get-Content -Raw -LiteralPath $packagePath
+$versionPattern = '("version"\s*:\s*")[^"]+(")'
+if ($packageText -notmatch $versionPattern) { throw "Could not find the version field in package.json." }
+$updatedPackage = $packageText -replace $versionPattern, ('${1}' + $newVersion + '${2}')
+if ($updatedPackage -ne $packageText) {
+    [System.IO.File]::WriteAllText($packagePath, $updatedPackage, (New-Object System.Text.UTF8Encoding($false)))
+    Write-Host "package.json version -> $newVersion"
+}
+
 Write-Host "Previous release: $previousTag"
 Write-Host "New release     : $newTag"
 Write-Host ""

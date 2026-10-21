@@ -1004,3 +1004,16 @@ backups.
 the previous release, local `backups/` ZIP, and a GitHub release with the ZIP and checksum attached. Release
 notes live in `release-notes/`. Licensing is AGPL-3.0-or-later with a separate trademark policy and commercial
 license path.
+
+### 46. MIME normalization for reproducible host tests (v1.0.1)
+
+GitHub's Windows runner mapped `.js` to `application/javascript` through the registry, while the local
+machine returned `text/javascript`. Both are valid, but the desktop-host regression asserted one value and
+failed in CI. `desktop/desktop_app.py` and `server.py` now pin a shared `extensions_map` for `.js`, `.mjs`,
+`.css`, `.json`, `.map`, `.svg` and `.wasm`, so the packaged host and the dev server answer identically on
+every Windows machine.
+
+The first CI run after the public push failed only on that assertion. `v1.0.1` fixes the host mapping and
+adds the `requirements-dev.txt` install step. The release helper also updates `package.json` to the tag
+version before committing, preventing metadata drift. The `backup` branch and `backups/` ZIP keep the
+previous release (`v1.0.0`) available.
